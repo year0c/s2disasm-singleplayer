@@ -16989,7 +16989,18 @@ DrawBlockColumn_Advanced:
 	moveq	#0,d0
 	move.b	(a0)+,d0
 	btst	d0,(a2)
+	beq.s	+
 
+	; Get the correct camera and draw this block.
+	movea.w	BGCameraLookup(pc,d0.w),a3	; Camera, either BG, BG2 or BG3 depending on Y
+	movem.l	d4-d5/a0,-(sp)
+	movem.l	d4-d5,-(sp)
+	bsr.w	GetBlock
+	movem.l	(sp)+,d4-d5
+	bsr.w	CalculateVRAMAddressOfBlockForPlayer1
+	bsr.w	ProcessAndWriteBlock_Vertical
+	movem.l	(sp)+,d4-d5/a0
++
 	; Move onto the next block down.
 	addi.w	#block_height,d4
 	dbf	d6,-
@@ -23244,7 +23255,7 @@ Obj2E_Raise:
 Obj2E_Types:	offsetTable
 		offsetTableEntry.w robotnik_monitor	; 0 - Static
 		offsetTableEntry.w sonic_1up		; 1 - Sonic 1-up
-;		offsetTableEntry.w tails_1up		; 2 - Tails 1-up
+		offsetTableEntry.w sonic_1up		; 2 - Tails 1-up
 		offsetTableEntry.w robotnik_monitor	; 3 - Robotnik
 		offsetTableEntry.w super_ring		; 4 - Super Ring
 		offsetTableEntry.w super_shoes		; 5 - Speed Shoes
@@ -24584,8 +24595,11 @@ Obj0F_Init:
 
 ; loc_13644:
 Obj0F_Main:
-	move.b	#1,d2
-	btst	#button_down,d0
+	moveq	#0,d2
+	move.b	(Title_screen_option).w,d2
+	move.b	(Ctrl_1_Press).w,d0
+	or.b	(Ctrl_2_Press).w,d0
+	btst	#button_up,d0
 	beq.s	+
 	subq.b	#1,d2
 	bcc.s	+
