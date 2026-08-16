@@ -23086,7 +23086,11 @@ SolidObject_Monitor_Sonic:
 ; sub_12768:
 SolidObject_Monitor_Tails:
 	btst	d6,status(a0)			; is Tails standing on the monitor?
-	beq.w	SolidObject_cont		; if not, branch
+	bne.s	Obj26_ChkOverEdge		; if yes, branch
+	; monitors always behave as solid for Tails
+	cmpi.b	#AniIDSonAni_Roll,anim(a1)	; is Tails spinning?
+	bne.w	SolidObject_cont		; if not, branch
+	rts
 ; End of function SolidObject_Monitor_Tails
 
 ; ---------------------------------------------------------------------------
@@ -23370,7 +23374,7 @@ shield_monitor:
 invincible_monitor:
 	addq.w	#1,(a2)
 	tst.b	(Super_Sonic_flag).w	; is Sonic super?
-	bne.s	++	; rts		; if yes, branch
+	bne.s	+	; rts		; if yes, branch
 	bset	#status_secondary.invincible,status_secondary(a1)	; give invincibility status
 	move.w	#20*60,invincibility_time(a1) ; 20 seconds
 	tst.b	(Current_Boss_ID).w	; don't change music during boss battles
@@ -23379,9 +23383,6 @@ invincible_monitor:
 	bls.s	+
 	move.w	#MusID_Invincible,d0
 	jsr	(PlayMusic).l
-+
-	move.b	#ObjID_InvStars,(Sonic_InvincibilityStars+id).w ; load Obj35 (invincibility stars) at $FFFFD200
-	move.w	a1,(Sonic_InvincibilityStars+parent).w
 +
 	rts
 ; ===========================================================================
@@ -29772,7 +29773,15 @@ return_18028:
 ObjectLayoutBoundary macro
 	dc.w	$FFFF, $0000, $0000
     endm
-	; This just gets fixed by the 2p removal apparently.
+
+    if fixBugs
+	; Sonic Team forgot to put a boundary marker here, meaning the game
+	; could potentially read past the start of the file and load random
+	; objects.
+	ObjectLayoutBoundary
+    endif
+
+
 	ObjectLayoutBoundary
 
 ; byte_18492:
