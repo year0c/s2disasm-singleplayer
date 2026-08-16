@@ -11173,8 +11173,8 @@ LevelSelect_Order:
 	dc.w	casino_night_zone_act_2	; 7
 	dc.w	hill_top_zone_act_1	; 8
 	dc.w	hill_top_zone_act_2	; 9
-	dc.w	mystic_cave_zone_act_1	; 10
-	dc.w	mystic_cave_zone_act_2	; 11
+;	dc.w	mystic_cave_zone_act_1	; 10
+;	dc.w	mystic_cave_zone_act_2	; 11
 	dc.w	oil_ocean_zone_act_1	; 12
 	dc.w	oil_ocean_zone_act_2	; 13
 	dc.w	metropolis_zone_act_1	; 14
@@ -25419,7 +25419,7 @@ LevelOrder: zoneOrderedTable 2,2	; WrdArr_LevelOrder
 	zoneTableEntry.w  0				; Act 2
 	; HTZ
 	zoneTableEntry.w  hill_top_zone_act_2		; Act 1
-	zoneTableEntry.w  mystic_cave_zone_act_1	; Act 2
+	zoneTableEntry.w  0				; Act 2
 	; HPZ
 	zoneTableEntry.w  hidden_palace_zone_act_2 	; Act 1
 	zoneTableEntry.w  oil_ocean_zone_act_1		; Act 2
@@ -25430,7 +25430,7 @@ LevelOrder: zoneOrderedTable 2,2	; WrdArr_LevelOrder
 	zoneTableEntry.w  oil_ocean_zone_act_2		; Act 1
 	zoneTableEntry.w  metropolis_zone_act_1		; Act 2
 	; MCZ
-	zoneTableEntry.w  mystic_cave_zone_act_2	; Act 1
+	zoneTableEntry.w  0				; Act 1
 	zoneTableEntry.w  oil_ocean_zone_act_1		; Act 2
 	; CNZ
 	zoneTableEntry.w  casino_night_zone_act_2	; Act 1
